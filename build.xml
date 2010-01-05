@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="AS3DMod" default="build-all">
+	<property file="./build.properties" />
+	
+	<!-- IMPORTANT Adapt this path to your local filesystem prior to compilation,
+		 Update all the paths in build.properties as well -->
+	<taskdef resource="flexTasks.tasks" classpath="c:/ASpace/sdk/ant/lib/flexTasks.jar"/>
+
+	<property name="APP_WIDTH" value="800"/>
+	<property name="APP_HEIGHT" value="600"/>
+	
+	<property name="DEMO_WIDTH" value="700"/>
+	<property name="DEMO_HEIGHT" value="500"/>
+	
+	<target name="build-all" depends="papervision3d,sandy3d,away3d,alternativa3d" description="Build demos for 4 engines"/>
+	
+	<!-- Temporary stuff -->
+	<target name="dashboard">
+        <mxmlc id="swf.compile"
+		    file="${app.home}/demo/com/as3dmod/demo/dashboard/Dashboard.as" 
+			output="bin/demo/dashboard.swf" 
+			keep-generated-actionscript="false">
+			<source-path path-element="${app.home}/src"/>
+        	<source-path path-element="${app.home}/demo"/>
+        	<source-path path-element="${papervision3d.home}"/>
+			<default-size width="${DEMO_WIDTH}" height="${DEMO_HEIGHT}" />
+			<default-background-color>0x000000</default-background-color>
+			<default-frame-rate>40</default-frame-rate>		
+        </mxmlc>
+    </target>
+	<!-- /Temporary stuff -->
+	
+	<target name="papervision3d">
+        <mxmlc id="swf.compile"
+		    file="${app.home}/demo/Pv3dDemo.as" 
+			output="bin/as3dmod-pv3d.swf" 
+			keep-generated-actionscript="false">
+			<source-path path-element="${app.home}/src"/>
+        	<source-path path-element="${app.home}/demo"/>
+        	<source-path path-element="${papervision3d.home}"/>
+			<default-size width="${APP_WIDTH}" height="${APP_HEIGHT}" />
+			<default-background-color>0x000000</default-background-color>
+			<default-frame-rate>40</default-frame-rate>		
+        </mxmlc>
+    </target>
+	
+	<target name="sandy3d">
+	        <mxmlc id="swf.compile"
+			    file="${app.home}/demo/Sandy3dDemo.as" 
+				output="bin/as3dmod-sandy3d.swf" 
+				keep-generated-actionscript="false">
+				<source-path path-element="${app.home}/src"/>
+	        	<source-path path-element="${app.home}/demo"/>
+	        	<source-path path-element="${sandy3d.home}"/>
+				<default-size width="${APP_WIDTH}" height="${APP_HEIGHT}" />
+				<default-background-color>0x000000</default-background-color>
+				<default-frame-rate>40</default-frame-rate>		
+	        </mxmlc>
+	    </target>
+	
+	<target name="away3d">
+        <mxmlc id="swf.compile"
+		    file="${app.home}/demo/Away3dDemo.as" 
+			output="bin/as3dmod-away3d.swf" 
+			keep-generated-actionscript="false">
+			<source-path path-element="${app.home}/src"/>
+        	<source-path path-element="${app.home}/demo"/>
+        	<source-path path-element="${away3d.home}"/>
+			<default-size width="${APP_WIDTH}" height="${APP_HEIGHT}" />
+			<default-background-color>0x000000</default-background-color>
+			<default-frame-rate>40</default-frame-rate>		
+        </mxmlc>
+    </target>
+	
+	<target name="alternativa3d">
+	        <mxmlc id="swf.compile"
+			    file="${app.home}/demo/Alternativa3dDemo.as" 
+				output="bin/as3dmod-alternativa3d.swf" 
+				keep-generated-actionscript="false">
+				<source-path path-element="${app.home}/src"/>
+	        	<source-path path-element="${app.home}/demo"/>
+	        	<compiler.include-libraries dir="${app.home}/lib" append="true">
+	        		<include name="Alternativa3D.swc" />
+	        		<include name="AlternativaTypes.swc" />
+	        		<include name="AlternativaUtils.swc" />
+	        	</compiler.include-libraries>	
+				<default-size width="${APP_WIDTH}" height="${APP_HEIGHT}" />
+				<default-background-color>0x000000</default-background-color>
+				<default-frame-rate>40</default-frame-rate>		
+	        </mxmlc>
+	 </target>
+	
+	<!-- The AS3Dmod tutorial -->
+	<target name="tutorial">
+        <mxmlc id="swf.compile"
+		    file="${app.home}/demo/com/as3dmod/tutorial/AS3DmodTutorial.as" 
+			output="bin/demo/tutorial.swf" 
+			keep-generated-actionscript="false">
+			<source-path path-element="${app.home}/src"/>
+        	<source-path path-element="${app.home}/demo"/>
+        	<source-path path-element="${papervision3d.home}"/>
+        	<source-path path-element="${tweener.home}"/>
+			<default-size width="${DEMO_WIDTH}" height="${DEMO_HEIGHT}" />
+			<default-background-color>0xffffff</default-background-color>
+			<default-frame-rate>40</default-frame-rate>		
+        </mxmlc>
+    </target>
+		
+	<!-- Modifiers demos -->
+	<target name="skew">
+        <mxmlc id="swf.compile"
+		    file="${app.home}/demo/com/as3dmod/demo/skew/SkewDemo.as" 
+			output="bin/demo/skew.swf" 
+			keep-generated-actionscript="false">
+			<source-path path-element="${app.home}/src"/>
+        	<source-path path-element="${app.home}/demo"/>
+        	<source-path path-element="${papervision3d.home}"/>
+			<default-size width="${DEMO_WIDTH}" height="${DEMO_HEIGHT}" />
+			<default-background-color>0xffffff</default-background-color>
+			<default-frame-rate>40</default-frame-rate>		
+        </mxmlc>
+    </target>
+	
+	<!-- API GENERATION -->
+	<!-- adapted from: http://www.rubenswieringa.com/blog/ant-and-asdoc -->
+	<target name="clean-docs">
+		<delete dir="${outputfolder}" failOnError="false" includeEmptyDirs="true"/>
+		<mkdir dir="${outputfolder}"/>
+	</target>
+	
+	<target name="build-docs" depends="clean-docs" description="Generates API docs of the library">
+		<exec executable="${asdoc.exe}" failonerror="true">
+			<arg line='-doc-classes ${classes}'/>
+			<arg line='-main-title "${title} ${version}"' />
+			<arg line='-window-title "${title} ${version}"' />
+			<arg line='-output ${outputfolder}' />
+			<arg line="-compiler.source-path src/"/>
+			<arg line="-exclude-classes ${exclude-classes}"/>
+			<!-- arg line="-exclude-dependencies"/ -->
+		</exec>
+	</target>
+	
+	<!-- SWC generation -->
+	<target name="build-sandy-swc" description="Generates a SWC of the Sandy lib">
+			<echo>Generating Sandy swc</echo>
+			<exec executable="${compc.exe}">
+				<arg line="-source-path ${sandy3d.home}"/>
+				<arg line="-output lib/sandy.swc"/>
+				<arg line="-include-sources ${sandy3d.home}"/>
+				<arg line="-strict=false"/>
+				<arg line="-warnings=false"/>
+			</exec>
+	</target>
+	
+	<target name="build-away-swc" description="Generates a SWC of the Away3d lib">
+			<echo>Generating Away3d swc</echo>
+			<exec executable="${compc.exe}">
+				<arg line="-source-path ${away3d.home}"/>
+				<arg line="-output lib/away.swc"/>
+				<arg line="-include-sources ${away3d.home}"/>
+				<arg line="-strict=false"/>
+				<arg line="-warnings=false"/>
+				<arg line="-externs away3d.core.draw.PrimitiveVolumeBlock"/>
+			</exec>
+	</target>
+	
+	<target name="build-papervision-swc" description="Generates a SWC of the Papervision3d lib">
+			<echo>Generating Papervision3d swc</echo>
+			<exec executable="${compc.exe}">
+				<arg line="-source-path ${papervision3d.home}"/>
+				<arg line="-output lib/pv3d.swc"/>
+				<arg line="-include-sources ${papervision3d.home}"/>
+				<arg line="-strict=false"/>
+				<arg line="-warnings=false"/>
+			</exec>
+	</target>
+	
+	<target name="build-swc" description="Generates a SWC of the library" depends="build-sandy-swc,build-away-swc,build-papervision-swc">
+		<echo>Generating swc using ${app.home}/src</echo>
+		<exec executable="${compc.exe}">
+			<arg line="-source-path ${app.home}/src ${sandy3d.home} ${away3d.home} ${papervision3d.home}"/>
+			<arg line="-output lib/as3dmod-${version}.swc"/>
+			<arg line="-include-sources ${app.home}/src"/>
+			<arg line="-external-library-path 'c:\Program Files\Adobe\Adobe Flash CS3\en\Configuration\ActionScript 3.0\Classes\playerglobal.swc'" /> 
+			<arg line="-external-library-path c:\Aspace\alternativa3d\Alternativa3D.swc" /> 
+			<arg line="-external-library-path c:\Aspace\alternativa3d\AlternativaTypes.swc" />
+			<arg line="-external-library-path c:\Aspace\alternativa3d\AlternativaUtils.swc" />
+			<arg line="-external-library-path lib/sandy.swc" />
+			<arg line="-external-library-path lib/away.swc" />
+			<arg line="-external-library-path lib/pv3d.swc" />
+		</exec>
+		
+		<delete file="lib/sandy.swc"/>
+		<delete file="lib/away.swc"/>
+		<delete file="lib/pv3d.swc"/>
+	</target>
+</project>
